@@ -9,9 +9,9 @@ runEEmon (Cargo Edition) is a simple showcase for downloading, installing, deplo
 
 According to the [OmniFaces Jakarta EE Survey 2020/2021](https://arjan-tijms.omnifaces.org/2021/02/jakarta-ee-survey-20202021-results.html), these are among the most widely used, freely available application servers.
 
-Under the hood, it is powered by the [https://codehaus-cargo.github.io/cargo/Maven+3+Plugin.html Codehaus Cargo] plugin for Maven. Additional runtimes can be configured by extending the POM file, which also contains the current runtime versions.
+Under the hood, it is powered by the [Codehaus Cargo](https://codehaus-cargo.github.io/cargo/Maven+3+Plugin.html) plugin for Maven. Additional runtimes can be configured by extending the POM file, which also contains the current runtime versions.
 
-The original [https://github.com/enji7/runeemon runEEmon] is a standalone Java command line tool.
+The original [runEEmon](https://github.com/enji7/runeemon) is a standalone Java command line tool.
 
 *Gotta run 'em all!*
 
@@ -42,7 +42,7 @@ These directories can be configured inside this project's POM file.
 
 ## Related Projects
 
-If you like this simplistic showcase, you might also be interested in the following projects:
+In addition to this simplistic showcase, you might also be interested in the following projects:
 
  * [Starter for Jakarta EE](https://start.jakarta.ee/): Generator for Jakarta EE projects.
  * [Jakarta EE 8 Starter Boilerplate](https://github.com/hantsy/jakartaee8-starter-boilerplate): Boilerplate project for bootstrapping new Jakarta EE 8 applications.
@@ -53,7 +53,7 @@ If you like this simplistic showcase, you might also be interested in the follow
 The following are just minor observations / issues:
 
  * Adding 'cargo:run' to the invocation does not keep the previously started container alive, but starts a new one after the integration tests.
- * Shutting down with CTRL-C, but also results in the output "No domains are currently running" for Payara.
+ * Shutting down with CTRL-C works, but also results in the output "No domains are currently running" for Payara.
  * The names of the extracted directories are not customizable.
  * Wildfly and TomEE are extracted into a deeper, redundant subdirectory.
 
