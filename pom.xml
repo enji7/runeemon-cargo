@@ -14,7 +14,7 @@
 
     <!-- directory that the containers will be extracted to; 
          configure a central directory if you don't want them to be extracted inside every single project -->
-    <container.extract.dir>${project.build.directory}</container.extract.dir>
+    <zoo.dir>${project.build.directory}</zoo.dir>
       
     <!-- Maven plugin versions -->
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -71,7 +71,7 @@
       <id>payara</id>
       
       <properties>
-        <container.home>${container.extract.dir}/${payara.version}</container.home>
+        <container.home>${zoo.dir}/payara5</container.home>
       </properties>
       
       <build>
@@ -97,7 +97,7 @@
                       <version>${payara.version}</version>
                       <type>zip</type>
                       <overWrite>false</overWrite>
-                      <outputDirectory>${container.extract.dir}</outputDirectory>
+                      <outputDirectory>${zoo.dir}</outputDirectory>
                     </artifactItem>
                   </artifactItems>
                 </configuration>
@@ -131,5 +131,5 @@
     </profile>
     
   </profiles>
-        
+
 </project>
