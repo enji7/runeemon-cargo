@@ -12,6 +12,10 @@
 
   <properties>
 
+    <!-- container versions -->
+    <payara.version>5.2021.1</payara.version>
+    <wildfly.version>23.0.0.Final</wildfly.version>
+
     <!-- directory that the containers will be downloaded and extracted to; 
          configure a central directory if you don't want them to be extracted inside every single project -->
     <nest.dir>${project.build.directory}/nest</nest.dir>
@@ -23,10 +27,6 @@
     <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
     <cargo-maven3-plugin.version>1.9.3</cargo-maven3-plugin.version>
 
-    <!-- container versions -->
-    <payara.version>5.2021.1</payara.version>
-    <wildfly.version>23.0.0.Final</wildfly.version>
-    
   </properties>
 
   <dependencies>
