@@ -71,9 +71,7 @@
       <id>payara</id>
       
       <properties>
-        <container.home>${container.extract.dir}/payara5</container.home>
-        <container.domainDir>${container.home}/glassfish/domains</container.domainDir>
-        <container.domainName>domain1</container.domainName>
+        <container.home>${container.extract.dir}/${payara.version}</container.home>
       </properties>
       
       <build>
@@ -119,9 +117,9 @@
               </container>
               <configuration>
                 <type>existing</type>
-                <home>${container.domainDir}</home>
+                <home>${container.home}/glassfish/domains</home>
                 <properties>
-                  <cargo.glassfish.domain.name>${container.domainName}</cargo.glassfish.domain.name>
+                  <cargo.glassfish.domain.name>domain1</cargo.glassfish.domain.name>
                   <cargo.remote.password></cargo.remote.password>
                 </properties>
               </configuration>
