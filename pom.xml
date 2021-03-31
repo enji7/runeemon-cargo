@@ -12,9 +12,10 @@
 
   <properties>
 
-    <!-- directory that the containers will be extracted to; 
+    <!-- directory that the containers will be downloaded and extracted to; 
          configure a central directory if you don't want them to be extracted inside every single project -->
-    <zoo.dir>${project.build.directory}</zoo.dir>
+    <nest.dir>${project.build.directory}/nest</nest.dir>
+    <zoo.dir>${project.build.directory}/zoo</zoo.dir>
       
     <!-- Maven plugin versions -->
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -24,6 +25,7 @@
 
     <!-- container versions -->
     <payara.version>5.2021.1</payara.version>
+    <wildfly.version>23.0.0.Final</wildfly.version>
     
   </properties>
 
@@ -77,7 +79,8 @@
       <build>
         <plugins>
           
-          <!-- takes care of downloading and extracting the container -->
+          <!-- takes care of downloading and extracting the container;
+               better than the cargo downloader because Maven coordinates are more stable than a custom download URL -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
@@ -129,7 +132,43 @@
         </plugins>
       </build>
     </profile>
+
+    <profile>
     
+      <id>wildfly</id>
+      
+      <properties>
+        <container.home>${zoo.dir}/wildfly-${wildfly.version}/wildfly-${wildfly.version}</container.home>
+      </properties>
+      
+      <build>
+        <plugins>
+          
+          <!-- takes care of download, deployment, startup, and shutdown -->
+          <plugin>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven3-plugin</artifactId>
+            <version>${cargo-maven3-plugin.version}</version>
+            <configuration>
+              <container>
+                <containerId>wildfly23x</containerId>
+                <zipUrlInstaller>
+                  <url>https://download.jboss.org/wildfly/${wildfly.version}/wildfly-${wildfly.version}.zip</url>
+                  <downloadDir>${nest.dir}</downloadDir>
+                  <extractDir>${zoo.dir}</extractDir>
+                </zipUrlInstaller>
+              </container>
+              <configuration>
+                <type>existing</type>
+                <home>${container.home}/standalone</home>
+              </configuration>
+            </configuration>
+          </plugin>
+          
+        </plugins>
+      </build>
+    </profile>
+        
   </profiles>
 
 </project>
