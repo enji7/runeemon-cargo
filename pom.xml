@@ -16,13 +16,9 @@
          configure a central directory if you don't want them to be extracted inside every single project -->
     <container.extract.dir>${project.build.directory}</container.extract.dir>
       
-    <failOnMissingWebXml>false</failOnMissingWebXml>
-    
-    <!-- compiler version -->
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-
     <!-- Maven plugin versions -->
+    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+    <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
     <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
     <cargo-maven3-plugin.version>1.9.3</cargo-maven3-plugin.version>
 
@@ -43,7 +39,29 @@
   </dependencies>
 
   <build>
+  
     <finalName>ping</finalName>
+
+    <plugins>
+    
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>11</source>
+          <target>11</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>${maven-war-plugin.version}</version>
+      </plugin>
+      
+    </plugins>
+    
   </build>
 
   <profiles>
