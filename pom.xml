@@ -11,10 +11,23 @@
   <packaging>war</packaging>
 
   <properties>
-  
+
+    <!-- directory that the containers will be extracted to; 
+         configure a central directory if you don't want them to be extracted inside every single project -->
+    <container.extract.dir>${project.build.directory}</container.extract.dir>
+      
+    <failOnMissingWebXml>false</failOnMissingWebXml>
+    
+    <!-- compiler version -->
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
-    <failOnMissingWebXml>false</failOnMissingWebXml>
+
+    <!-- Maven plugin versions -->
+    <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
+    <cargo-maven3-plugin.version>1.9.3</cargo-maven3-plugin.version>
+
+    <!-- container versions -->
+    <payara.version>5.2021.1</payara.version>
     
   </properties>
 
@@ -27,49 +40,80 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- test dependencies -->
-
-    <dependency>
-      <groupId>org.jboss.resteasy</groupId>
-      <artifactId>resteasy-client-microprofile</artifactId>
-      <version>4.5.8.Final</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>5.7.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.7.0</version>
-      <scope>test</scope>
-    </dependency>
-
   </dependencies>
 
   <build>
-
     <finalName>ping</finalName>
-
-    <plugins>
-    
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.2</version>
-        <configuration>
-          <!-- this project contains only remote tests that require a running 
-            server (make no sense during mvn build) -->
-          <skipTests>true</skipTests>
-        </configuration>
-      </plugin>
-      
-    </plugins>
-
   </build>
 
+  <profiles>
+  
+    <profile>
+    
+      <id>payara</id>
+      
+      <properties>
+        <container.home>${container.extract.dir}/payara5</container.home>
+        <container.domainDir>${container.home}/glassfish/domains</container.domainDir>
+        <container.domainName>domain1</container.domainName>
+      </properties>
+      
+      <build>
+        <plugins>
+          
+          <!-- takes care of downloading and extracting the container -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>${maven-dependency-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>unpack</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>fish.payara.distributions</groupId>
+                      <artifactId>payara</artifactId>
+                      <version>${payara.version}</version>
+                      <type>zip</type>
+                      <overWrite>false</overWrite>
+                      <outputDirectory>${container.extract.dir}</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          
+          <!-- takes care of deployment, startup, and shutdown -->
+          <plugin>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven3-plugin</artifactId>
+            <version>${cargo-maven3-plugin.version}</version>
+            <configuration>
+              <container>
+                <containerId>payara</containerId>
+                <home>${container.home}</home>
+              </container>
+              <configuration>
+                <type>existing</type>
+                <home>${container.domainDir}</home>
+                <properties>
+                  <cargo.glassfish.domain.name>${container.domainName}</cargo.glassfish.domain.name>
+                  <cargo.remote.password></cargo.remote.password>
+                </properties>
+              </configuration>
+            </configuration>
+          </plugin>
+          
+        </plugins>
+      </build>
+    </profile>
+    
+  </profiles>
+        
 </project>
