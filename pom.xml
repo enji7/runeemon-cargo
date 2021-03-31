@@ -15,6 +15,7 @@
     <!-- container versions -->
     <openliberty.version>21.0.0.2</openliberty.version>
     <payara.version>5.2021.1</payara.version>
+    <tomee.version>8.0.6</tomee.version>
     <wildfly.version>23.0.0.Final</wildfly.version>
 
     <!-- directory that the containers will be downloaded and extracted to; 
@@ -205,6 +206,42 @@
       </build>
     </profile>
 
+    <profile>
+    
+      <id>tomee</id>
+      
+      <properties>
+        <container.home>${zoo.dir}/apache-tomee-${tomee.version}-plume/apache-tomee-plume-${tomee.version}</container.home>
+      </properties>
+      
+      <build>
+        <plugins>
+          
+          <!-- takes care of download, deployment, startup, and shutdown -->
+          <plugin>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven3-plugin</artifactId>
+            <version>${cargo-maven3-plugin.version}</version>
+            <configuration>
+              <container>
+                <containerId>tomee8x</containerId>
+                <zipUrlInstaller>
+                  <url>https://mirror.klaus-uwe.me/apache/tomee/tomee-8.0.6/apache-tomee-8.0.6-plume.zip</url>
+                  <downloadDir>${nest.dir}</downloadDir>
+                  <extractDir>${zoo.dir}</extractDir>
+                </zipUrlInstaller>
+              </container>
+              <configuration>
+                <type>existing</type>
+                <home>${container.home}</home>
+              </configuration>
+            </configuration>
+          </plugin>
+          
+        </plugins>
+      </build>
+    </profile>
+        
     <profile>
     
       <id>wildfly</id>

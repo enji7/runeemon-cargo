@@ -1,8 +1,9 @@
 # runeemon-cargo
 
-mvn [clean] package cargo:run -Ppayara
-mvn [clean] package cargo:run -Pwildfly
 mvn [clean] package cargo:run -Popenliberty
+mvn [clean] package cargo:run -Ppayara
+mvn [clean] package cargo:run -Ptomee
+mvn [clean] package cargo:run -Pwildfly
 
 http://localhost:8080/ping/ping
 
@@ -12,3 +13,4 @@ http://localhost:8080/ping/ping
  * download also possible with cargo plugin (instead of maven dependency plugin)?
  * latest cargo version for wildfly: 23.x; latest wildfly version: 25.x
  * zipUrlInstaller: double directory for wildfly
+ * automated test
