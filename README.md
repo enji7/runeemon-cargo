@@ -1,6 +1,8 @@
 # runeemon-cargo
 
-mvn clean package cargo:run -Ppayara
+mvn [clean] package cargo:run -Ppayara
+mvn [clean] package cargo:run -Pwildfly
+mvn [clean] package cargo:run -Popenliberty
 
 http://localhost:8080/ping/ping
 

@@ -13,6 +13,7 @@
   <properties>
 
     <!-- container versions -->
+    <openliberty.version>21.0.0.2</openliberty.version>
     <payara.version>5.2021.1</payara.version>
     <wildfly.version>23.0.0.Final</wildfly.version>
 
@@ -67,6 +68,77 @@
   </build>
 
   <profiles>
+
+    <profile>
+    
+      <id>openliberty</id>
+      
+      <properties>
+        <container.home>${zoo.dir}/wlp</container.home>
+      </properties>
+      
+      <build>
+        <plugins>
+          
+          <!-- takes care of downloading and extracting the container;
+               better than the cargo downloader because Maven coordinates are more stable than a custom download URL -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>${maven-dependency-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>unpack</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>io.openliberty</groupId>
+                      <artifactId>openliberty-runtime</artifactId>
+                      <version>${openliberty.version}</version>
+                      <type>zip</type>
+                      <overWrite>false</overWrite>
+                      <outputDirectory>${zoo.dir}</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          
+          <!-- takes care of deployment, startup, and shutdown -->
+          <plugin>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven3-plugin</artifactId>
+            <version>${cargo-maven3-plugin.version}</version>
+            <configuration>
+              <container>
+                <!-- there is no separate ID for OpenLiberty, so we use the one for "WebSphere Liberty" -->
+                <containerId>liberty</containerId>
+                <home>${container.home}</home>
+              </container>
+              <configuration>
+                <!-- cargo does not support "existing" for liberty, so we use "standalone" -->
+                <type>standalone</type>
+                <home>${container.home}/usr</home>
+                <!-- the server.xml of the "openliberty-runtime" artifact is lacking the JEE feature -->
+                <xmlReplacements>
+                  <xmlReplacement>
+                    <file>servers/defaultServer/server.xml</file>
+                    <xpathExpression>/server/featureManager/feature</xpathExpression>
+                    <value>jakartaee-8.0</value>
+                  </xmlReplacement>
+                </xmlReplacements>
+              </configuration>
+            </configuration>
+          </plugin>
+          
+        </plugins>
+      </build>
+    </profile>
   
     <profile>
     
