@@ -52,11 +52,10 @@ If you like this simplistic showcase, you might also be interested in the follow
 
 The following are just minor observations / issues:
 
- * Shutting down with CTRL-C, but also results in the output "No domains are currently running" for Payara.
- * At the time of writing, the latest Cargo version for Wildfly was 23.x, whereas the latest Wildfly version was 25.x (but works anyway).
- * The names of the extracted directories are not customizable.
- * Wildfly is extracted into a deeper, redundant subdirectory.
  * Adding 'cargo:run' to the invocation does not keep the previously started container alive, but starts a new one after the integration tests.
+ * Shutting down with CTRL-C, but also results in the output "No domains are currently running" for Payara.
+ * The names of the extracted directories are not customizable.
+ * Wildfly and TomEE are extracted into a deeper, redundant subdirectory.
 
 ## FAQ
 

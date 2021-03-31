@@ -115,7 +115,31 @@
           </execution>
         </executions>
       </plugin>
-      
+
+      <!-- takes care of download, deployment, startup, and shutdown -->
+      <plugin>
+        <groupId>org.codehaus.cargo</groupId>
+        <artifactId>cargo-maven3-plugin</artifactId>
+        <version>${cargo-maven3-plugin.version}</version>
+        <!-- automatically start the server before the integration tests (and stop it afterwards) -->
+        <executions>
+          <execution>
+            <id>start-container</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>start</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>stop-container</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+                
     </plugins>
     
   </build>
@@ -162,7 +186,6 @@
             </executions>
           </plugin>
           
-          <!-- takes care of deployment, startup, and shutdown -->
           <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven3-plugin</artifactId>
@@ -233,7 +256,6 @@
             </executions>
           </plugin>
           
-          <!-- takes care of deployment, startup, and shutdown -->
           <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven3-plugin</artifactId>
@@ -269,7 +291,6 @@
       <build>
         <plugins>
           
-          <!-- takes care of download, deployment, startup, and shutdown -->
           <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven3-plugin</artifactId>
@@ -288,23 +309,6 @@
                 <home>${container.home}</home>
               </configuration>
             </configuration>
-            <!-- automatically start the server before the integration tests (and stop it afterwards) -->
-            <executions>
-              <execution>
-                <id>start-container</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>start</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>stop-container</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>stop</goal>
-                </goals>
-              </execution>
-            </executions>
           </plugin>
           
         </plugins>
@@ -322,13 +326,13 @@
       <build>
         <plugins>
           
-          <!-- takes care of download, deployment, startup, and shutdown -->
           <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven3-plugin</artifactId>
             <version>${cargo-maven3-plugin.version}</version>
             <configuration>
               <container>
+                <!-- currently, there is no newer ID (but still works for newer versions) -->
                 <containerId>wildfly23x</containerId>
                 <zipUrlInstaller>
                   <url>https://download.jboss.org/wildfly/${wildfly.version}/wildfly-${wildfly.version}.zip</url>
