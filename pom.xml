@@ -12,20 +12,21 @@
 
   <properties>
 
+    <!-- directory that the containers will be downloaded and extracted to; 
+         configure a central directory if you don't want them to be extracted inside every single project -->
+    <nest.dir>${project.build.directory}/nest</nest.dir>
+    <zoo.dir>${project.build.directory}/zoo</zoo.dir>
+
     <!-- container versions -->
     <openliberty.version>21.0.0.2</openliberty.version>
     <payara.version>5.2021.1</payara.version>
     <tomee.version>8.0.6</tomee.version>
     <wildfly.version>23.0.0.Final</wildfly.version>
 
-    <!-- directory that the containers will be downloaded and extracted to; 
-         configure a central directory if you don't want them to be extracted inside every single project -->
-    <nest.dir>${project.build.directory}/nest</nest.dir>
-    <zoo.dir>${project.build.directory}/zoo</zoo.dir>
-      
     <!-- Maven plugin versions -->
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
+    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
     <cargo-maven3-plugin.version>1.9.3</cargo-maven3-plugin.version>
 
@@ -38,6 +39,28 @@
       <artifactId>jakarta.jakartaee-api</artifactId>
       <version>8.0.0</version>
       <scope>provided</scope>
+    </dependency>
+
+    <!-- test dependencies -->
+
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-client-microprofile</artifactId>
+      <version>4.5.8.Final</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.7.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.7.0</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
@@ -62,6 +85,35 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <version>${maven-war-plugin.version}</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <!-- we exclude the tests here because we have to start the container first... -->
+          <excludes>
+            <exclude>**/*.java</exclude>
+          </excludes>
+        </configuration>
+        <!-- ...and now we include the tests again for the integration test phase (when the container is running) -->
+        <executions>
+          <execution>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <excludes>
+                <exclude>none</exclude>
+              </excludes>
+              <includes>
+                <include>**/*.java</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       
     </plugins>
@@ -236,6 +288,23 @@
                 <home>${container.home}</home>
               </configuration>
             </configuration>
+            <!-- automatically start the server before the integration tests (and stop it afterwards) -->
+            <executions>
+              <execution>
+                <id>start-container</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>start</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>stop-container</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>stop</goal>
+                </goals>
+              </execution>
+            </executions>
           </plugin>
           
         </plugins>
