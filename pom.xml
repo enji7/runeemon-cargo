@@ -18,7 +18,7 @@
     <zoo.dir>${project.build.directory}/zoo</zoo.dir>
 
     <!-- container versions -->
-    <openliberty.version>21.0.0.2</openliberty.version>
+    <openliberty.version>21.0.0.3</openliberty.version>
     <payara.version>5.2021.1</payara.version>
     <tomee.version>8.0.6</tomee.version>
     <wildfly.version>23.0.0.Final</wildfly.version>
